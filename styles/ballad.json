@@ -1,0 +1,82 @@
+{
+	"title": "ballad",
+	"bpm": 70.0,
+    "signature": 4,
+	"layout": [
+		{
+			"label": "Main A",
+			"time": 3.43,
+            "bars": 4 
+		},
+		{
+			"label": "Main B",
+			"time": 17.14,
+            "bars": 4 
+		},
+		{
+			"label": "Main C",
+			"time": 30.86,
+            "bars": 4 
+		},
+		{
+			"label": "Main D",
+			"time": 44.57,
+            "bars": 4 
+		},
+		{
+			"label": "Fill In AA",
+			"time": 58.29,
+            "bars": 1
+		},
+		{
+			"label": "Fill In BB",
+			"time": 61.71,
+            "bars": 1
+		},
+		{
+			"label": "Fill In CC",
+			"time": 65.14,
+            "bars": 1
+		},
+		{
+			"label": "Fill In DD",
+			"time": 68.57,
+            "bars": 1
+		},
+		{
+			"label": "Intro A",
+			"time": 72.00,
+            "bars": 1
+		},
+		{
+			"label": "Intro B",
+			"time": 75.43,
+            "bars": 2
+		},
+		{
+			"label": "Intro C",
+			"time": 82.29,
+            "bars": 4
+		},
+		{
+			"label": "Ending A",
+			"time": 96.00,
+            "bars": 1
+		},
+		{
+			"label": "Ending B",
+			"time": 99.43,
+            "bars": 2
+		},
+		{
+			"label": "Ending C",
+			"time": 106.29,
+            "bars": 3
+		},
+		{
+			"label": "Fill In BA",
+			"time": 116.57,
+            "bars": 1
+		}
+	]
+}
