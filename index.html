@@ -1,584 +1,135 @@
 <!DOCTYPE html>
 <html lang="pt-BR" data-bs-theme="dark">
+
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no, maximum-scale=1.0">
-    <title>Drummer Pro v3 Mobile</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+    <title>Drummer Pro</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.0/font/bootstrap-icons.css">
-    <style>
-        * { -webkit-tap-highlight-color: transparent; }
-        body { 
-            overflow: hidden; 
-            touch-action: none;
-            background: linear-gradient(135deg, #1a1a1a 0%, #0a0a0a 100%);
-        }
-        
-        /* Painel estilo teclado arranjador */
-        .keyboard-panel {
-            background: linear-gradient(180deg, #2a2a2a 0%, #1a1a1a 100%);
-            border: 3px solid #333;
-            border-radius: 15px;
-            box-shadow: 
-                0 10px 30px rgba(0,0,0,0.8),
-                inset 0 1px 0 rgba(255,255,255,0.1),
-                inset 0 -5px 20px rgba(0,0,0,0.5);
-            padding: 12px;
-        }
-        
-        .lcd-display {
-            background: linear-gradient(180deg, #1a3a2a 0%, #0d1f15 100%);
-            border: 2px solid #0a4a2a;
-            border-radius: 8px;
-            padding: 15px;
-            box-shadow: 
-                inset 0 3px 10px rgba(0,0,0,0.7),
-                0 2px 5px rgba(0,255,100,0.2);
-            font-family: 'Courier New', monospace;
-        }
-        
-        .lcd-text {
-            color: #00ff88;
-            text-shadow: 0 0 8px rgba(0,255,136,0.8);
-            letter-spacing: 2px;
-        }
-        
-        .lcd-bpm {
-            font-size: 3rem;
-            font-weight: bold;
-            color: #00ff88;
-            text-shadow: 0 0 15px rgba(0,255,136,0.9);
-            font-family: 'Courier New', monospace;
-        }
-        
-        .style-select {
-            background: linear-gradient(180deg, #2a2a2a 0%, #1a1a1a 100%);
-            border: 2px solid #444;
-            color: #00ff88;
-            font-family: 'Courier New', monospace;
-            font-weight: bold;
-            padding: 10px;
-            border-radius: 8px;
-            box-shadow: inset 0 2px 5px rgba(0,0,0,0.5);
-        }
-        
-        .style-select:focus {
-            border-color: #00ff88;
-            box-shadow: 0 0 10px rgba(0,255,136,0.5);
-            outline: none;
-        }
-        
-        .pad-btn { 
-            height: 75px;
-            font-weight: bold;
-            border-width: 3px;
-            transition: all 0.08s;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 0.7rem;
-            user-select: none;
-            -webkit-user-select: none;
-            border-radius: 8px;
-            position: relative;
-            overflow: hidden;
-            box-shadow: 
-                0 4px 0 rgba(0,0,0,0.3),
-                0 6px 10px rgba(0,0,0,0.4),
-                inset 0 1px 0 rgba(255,255,255,0.1);
-        }
-        
-        .pad-btn::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            right: 0;
-            height: 35%;
-            background: linear-gradient(180deg, rgba(255,255,255,0.2) 0%, transparent 100%);
-            pointer-events: none;
-        }
-        
-        .pad-btn:active:not(:disabled) { 
-            transform: translateY(3px); 
-            box-shadow: 
-                0 1px 0 rgba(0,0,0,0.3),
-                0 2px 5px rgba(0,0,0,0.4);
-        }
-        
-        .pad-btn:disabled { 
-            background: linear-gradient(180deg, #1a1a1a 0%, #0d0d0d 100%) !important;
-            border-color: #2a2a2a !important;
-            color: #3a3a3a !important;
-            opacity: 0.4;
-            box-shadow: inset 0 2px 5px rgba(0,0,0,0.5);
-        }
-        
-        /* Cores estilo teclado profissional */
-        .btn-main { 
-            background: linear-gradient(180deg, #1e88e5 0%, #1565c0 100%);
-            border-color: #0d47a1;
-            color: white;
-            text-shadow: 0 1px 2px rgba(0,0,0,0.5);
-        }
-        
-        .btn-fill { 
-            background: linear-gradient(180deg, #ffa726 0%, #f57c00 100%);
-            border-color: #e65100;
-            color: white;
-            text-shadow: 0 1px 2px rgba(0,0,0,0.5);
-        }
-        
-        .btn-intro { 
-            background: linear-gradient(180deg, #26c6da 0%, #00acc1 100%);
-            border-color: #006064;
-            color: white;
-            text-shadow: 0 1px 2px rgba(0,0,0,0.5);
-        }
-        
-        .btn-end { 
-            background: linear-gradient(180deg, #ef5350 0%, #e53935 100%);
-            border-color: #b71c1c;
-            color: white;
-            text-shadow: 0 1px 2px rgba(0,0,0,0.5);
-        }
-
-        .active-playing { 
-            background: linear-gradient(180deg, #00e676 0%, #00c853 100%) !important;
-            border-color: #00e676 !important;
-            box-shadow: 
-                0 0 30px rgba(0,230,118,0.8),
-                0 4px 0 rgba(0,200,83,0.5),
-                inset 0 0 20px rgba(255,255,255,0.3) !important;
-            transform: scale(1.03);
-            animation: pulse-glow 0.6s ease-in-out infinite;
-        }
-        
-        @keyframes pulse-glow {
-            0%, 100% { 
-                box-shadow: 
-                    0 0 30px rgba(0,230,118,0.8),
-                    0 4px 0 rgba(0,200,83,0.5),
-                    inset 0 0 20px rgba(255,255,255,0.3);
-            }
-            50% { 
-                box-shadow: 
-                    0 0 40px rgba(0,230,118,1),
-                    0 4px 0 rgba(0,200,83,0.5),
-                    inset 0 0 25px rgba(255,255,255,0.4);
-            }
-        }
-        
-        .queued { 
-            animation: blink-orange 0.4s infinite;
-            border-color: #ff9800 !important;
-        }
-        
-        @keyframes blink-orange { 
-            0%, 100% { 
-                background: linear-gradient(180deg, #ff6f00 0%, #e65100 100%);
-                box-shadow: 0 0 20px rgba(255,111,0,0.6);
-            }
-            50% { 
-                background: linear-gradient(180deg, #ffb300 0%, #ff6f00 100%);
-                box-shadow: 0 0 30px rgba(255,179,0,0.8);
-            } 
-        }
-        
-        .control-btn { 
-            width: 80px;
-            height: 80px;
-            border-radius: 50%;
-            font-size: 2rem;
-            border-width: 4px;
-            box-shadow: 
-                0 6px 0 rgba(0,0,0,0.3),
-                0 8px 15px rgba(0,0,0,0.5),
-                inset 0 2px 0 rgba(255,255,255,0.2);
-            transition: all 0.1s;
-        }
-        
-        .control-btn:active:not(:disabled) { 
-            transform: translateY(4px);
-            box-shadow: 
-                0 2px 0 rgba(0,0,0,0.3),
-                0 3px 8px rgba(0,0,0,0.5);
-        }
-        
-        .control-btn.btn-success {
-            background: linear-gradient(180deg, #66bb6a 0%, #43a047 100%);
-            border-color: #2e7d32;
-        }
-        
-        .control-btn.btn-danger {
-            background: linear-gradient(180deg, #ef5350 0%, #e53935 100%);
-            border-color: #c62828;
-        }
-        
-        .control-btn.btn-outline-light {
-            background: linear-gradient(180deg, #757575 0%, #616161 100%);
-            border-color: #424242;
-            color: white;
-        }
-        
-        .section-label {
-            font-size: 0.65rem;
-            color: #888;
-            font-weight: normal;
-            margin-bottom: 2px;
-            text-transform: uppercase;
-            letter-spacing: 1px;
-        }
-        
-        .metal-frame {
-            border: 3px solid #444;
-            border-radius: 10px;
-            background: linear-gradient(135deg, #2a2a2a 0%, #1a1a1a 50%, #2a2a2a 100%);
-            padding: 8px;
-            box-shadow: 
-                inset 0 2px 5px rgba(0,0,0,0.5),
-                0 2px 10px rgba(0,0,0,0.3);
-        }
-    </style>
+    <link rel="manifest" href="manifest.json">
 </head>
-<body>
 
-    <div class="d-flex flex-column vh-100 p-2">
-        <!-- LCD Display -->
-        <div class="lcd-display mb-3">
-            <div class="d-flex justify-content-between align-items-center">
-                <div style="flex: 1;">
-                    <div class="text-uppercase" style="font-size: 0.7rem; color: #00aa66;">RHYTHM STYLE</div>
-                    <select id="style-select" class="style-select w-100 mt-2">
-                        <option value="">-- CARREGUE UMA PASTA --</option>
-                    </select>
-                </div>
-                <div class="text-center ms-3">
-                    <div class="lcd-bpm" id="bpm-display">--</div>
-                    <div style="font-size: 0.8rem; color: #00aa66;">BPM</div>
+<body class="bg-dark text-light vh-100 d-flex flex-column overflow-hidden">
+
+    <div class="container-fluid p-2 flex-shrink-0">
+        <div class="card bg-secondary bg-opacity-10 border-secondary">
+            <div class="card-body p-2">
+                <div class="row align-items-center g-2">
+                    <div class="col-8">
+                        <div class="col-12">
+                            <button id="btn-load-folder"
+                                class="btn btn-secondary w-100 my-2 fw-bold d-flex flex-column align-items-center justify-content-center">
+                                <i class="bi bi-folder2-open fs-4"></i>
+                                <span>Abrir pasta de styles</span>
+                            </button>
+                            <input type="file" id="folder-input" webkitdirectory directory multiple
+                                style="display: none;">
+                        </div>
+                        <select id="style-select"
+                            class="form-select form-select-sm bg-dark text-light border-secondary fw-bold">
+                            <option value="">Selecione um style...</option>
+                        </select>
+                    </div>
+                    <div class="col-4 text-center border-start border-secondary">
+                        <div id="bpm-display" class="h2 fw-bold text-info mb-0 font-monospace">--</div>
+                        <div class="small text-secondary" style="font-size: 0.6rem;">BPM</div>
+                    </div>
                 </div>
             </div>
         </div>
+    </div>
 
-        <!-- Painel de Pads -->
-        <div class="keyboard-panel flex-grow-1 mb-3 overflow-y-auto">
-            <!-- INTRO -->
-            <div class="section-label text-center">INTRO</div>
+    <div class="container-fluid flex-grow-1 overflow-y-auto p-2">
+        <div class="bg-black bg-opacity-25 border border-secondary rounded p-3 h-100">
             <div class="row g-2 mb-3">
-                <div class="col-4"><button id="pad-Intro A" class="btn btn-intro w-100 pad-btn" disabled>A</button></div>
-                <div class="col-4"><button id="pad-Intro B" class="btn btn-intro w-100 pad-btn" disabled>B</button></div>
-                <div class="col-4"><button id="pad-Intro C" class="btn btn-intro w-100 pad-btn" disabled>C</button></div>
+                <div class="col-4">
+                    <button id="btn-intro-0" class="btn btn-outline-info w-100 py-3 fw-bold text-truncate"
+                        disabled>Intro A</button>
+                </div>
+                <div class="col-4">
+                    <button id="btn-intro-1" class="btn btn-outline-info w-100 py-3 fw-bold text-truncate"
+                        disabled>Intro B</button>
+                </div>
+                <div class="col-4">
+                    <button id="btn-intro-2" class="btn btn-outline-info w-100 py-3 fw-bold text-truncate"
+                        disabled>Intro C</button>
+                </div>
             </div>
-
-            <!-- MAIN -->
-            <div class="section-label text-center">MAIN VARIATION</div>
             <div class="row g-2 mb-3">
-                <div class="col-3"><button id="pad-Main A" class="btn btn-main w-100 pad-btn" disabled>A</button></div>
-                <div class="col-3"><button id="pad-Main B" class="btn btn-main w-100 pad-btn" disabled>B</button></div>
-                <div class="col-3"><button id="pad-Main C" class="btn btn-main w-100 pad-btn" disabled>C</button></div>
-                <div class="col-3"><button id="pad-Main D" class="btn btn-main w-100 pad-btn" disabled>D</button></div>
+                <div class="col-3"><button id="btn-main-0" class="btn btn-outline-primary w-100 py-4 fw-bold shadow-sm"
+                        disabled>Main A</button>
+                </div>
+                <div class="col-3"><button id="btn-main-1" class="btn btn-outline-primary w-100 py-4 fw-bold shadow-sm"
+                        disabled>Main B</button>
+                </div>
+                <div class="col-3"><button id="btn-main-2" class="btn btn-outline-primary w-100 py-4 fw-bold shadow-sm"
+                        disabled>Main C</button>
+                </div>
+                <div class="col-3"><button id="btn-main-3" class="btn btn-outline-primary w-100 py-4 fw-bold shadow-sm"
+                        disabled>Main D</button>
+                </div>
             </div>
-
-            <!-- FILL IN -->
-            <div class="section-label text-center">FILL IN</div>
             <div class="row g-2 mb-3">
-                <div class="col-3"><button id="pad-Fill In AA" class="btn btn-fill w-100 pad-btn" disabled>AA</button></div>
-                <div class="col-3"><button id="pad-Fill In BB" class="btn btn-fill w-100 pad-btn" disabled>BB</button></div>
-                <div class="col-3"><button id="pad-Fill In CC" class="btn btn-fill w-100 pad-btn" disabled>CC</button></div>
-                <div class="col-3"><button id="pad-Fill In DD" class="btn btn-fill w-100 pad-btn" disabled>DD</button></div>
+                <div class="col-3"><button id="btn-fill-0" class="btn btn-outline-warning w-100 py-3 fw-bold shadow-sm"
+                        disabled>Fill In AA</button>
+                </div>
+                <div class="col-3"><button id="btn-fill-1" class="btn btn-outline-warning w-100 py-3 fw-bold shadow-sm"
+                        disabled>Fill In BB</button>
+                </div>
+                <div class="col-3"><button id="btn-fill-2" class="btn btn-outline-warning w-100 py-3 fw-bold shadow-sm"
+                        disabled>Fill In CC</button>
+                </div>
+                <div class="col-3"><button id="btn-fill-3" class="btn btn-outline-warning w-100 py-3 fw-bold shadow-sm"
+                        disabled>Fill In DD</button>
+                </div>
             </div>
-
-            <!-- ENDING -->
-            <div class="section-label text-center">ENDING</div>
             <div class="row g-2">
-                <div class="col-4"><button id="pad-Ending A" class="btn btn-end w-100 pad-btn" disabled>A</button></div>
-                <div class="col-4"><button id="pad-Ending B" class="btn btn-end w-100 pad-btn" disabled>B</button></div>
-                <div class="col-4"><button id="pad-Ending C" class="btn btn-end w-100 pad-btn" disabled>C</button></div>
+                <div class="col-4">
+                    <button id="btn-end-0" class="btn btn-outline-danger w-100 py-3 fw-bold text-truncate"
+                        disabled>Ending A</button>
+                </div>
+                <div class="col-4">
+                    <button id="btn-end-1" class="btn btn-outline-danger w-100 py-3 fw-bold text-truncate"
+                        disabled>Ending B</button>
+                </div>
+                <div class="col-4">
+                    <button id="btn-end-2" class="btn btn-outline-danger w-100 py-3 fw-bold text-truncate"
+                        disabled>Ending C</button>
+                </div>
             </div>
         </div>
+    </div>
 
-        <!-- Controles -->
-        <div class="metal-frame">
-            <div class="d-flex justify-content-center align-items-center gap-3 py-2">
-                <button id="btn-load-folder" class="control-btn btn-outline-light" title="Carregar Pasta">
-                    <i class="bi bi-folder-fill"></i>
+    <div class="bg-dark border-top border-secondary p-2 flex-shrink-0">
+        <div class="row g-2">
+            <div class="col-6">
+                <button id="btn-start"
+                    class="btn btn-success w-100 py-3 fw-bold d-flex flex-column align-items-center justify-content-center"
+                    disabled>
+                    <i class="bi bi-play-fill fs-3"></i>
+                    <span>Play</span>
                 </button>
-                <input type="file" id="folder-input" webkitdirectory directory multiple style="display: none;">
-                
-                <button id="btn-start" class="control-btn btn-success" disabled title="Iniciar">
-                    <i class="bi bi-play-fill"></i>
-                </button>
-                
-                <button id="btn-stop" class="control-btn btn-danger" disabled title="Parar">
-                    <i class="bi bi-stop-fill"></i>
+            </div>
+            <div class="col-6">
+                <button id="btn-stop"
+                    class="btn btn-danger w-100 py-3 fw-bold d-flex flex-column align-items-center justify-content-center"
+                    disabled>
+                    <i class="bi bi-stop-fill fs-3"></i>
+                    <span>Stop</span>
                 </button>
             </div>
         </div>
     </div>
 
+    <script src="app.js"></script>
     <script>
-        // Função de vibração
-        function vibrate(duration = 30) {
-            if ('vibrate' in navigator) {
-                navigator.vibrate(duration);
-            }
-        }
-
-        class DrummerEngine {
-            constructor() {
-                this.audioCtx = null;
-                this.buffer = null;
-                this.data = null;
-                this.isPlaying = false;
-                
-                this.currentSectionIndex = 0;
-                this.currentBar = 0;
-                this.currentBeat = 0;
-                
-                this.nextNoteTime = 0.0;
-                this.timerID = null;
-                this.pendingSection = null;
-
-                this.onSectionChange = (label) => {};
-            }
-
-            async init() {
-                if (!this.audioCtx) this.audioCtx = new (window.AudioContext || window.webkitAudioContext)();
-                if (this.audioCtx.state === 'suspended') await this.audioCtx.resume();
-            }
-
-            async loadKit(jsonFile, audioFile) {
-                const [jsonText, arrayBuffer] = await Promise.all([jsonFile.text(), audioFile.arrayBuffer()]);
-                this.data = JSON.parse(jsonText);
-                this.buffer = await this.audioCtx.decodeAudioData(arrayBuffer);
-                this.reset();
-            }
-
-            reset() {
-                this.currentSectionIndex = this.data.layout.findIndex(s => s.label.includes('Main A')) || 0;
-                this.currentBar = 0;
-                this.currentBeat = 0;
-                this.pendingSection = null;
-            }
-
-            start() {
-                this.isPlaying = true;
-                this.nextNoteTime = this.audioCtx.currentTime + 0.05;
-                this.currentBar = 0;
-                this.currentBeat = 0;
-                this.scheduler();
-            }
-
-            stop() {
-                this.isPlaying = false;
-                clearTimeout(this.timerID);
-                this.currentBar = 0;
-                this.currentBeat = 0;
-            }
-
-            scheduler() {
-                while (this.nextNoteTime < this.audioCtx.currentTime + 0.1) {
-                    this.scheduleBeat();
-                }
-                if (this.isPlaying) this.timerID = setTimeout(() => this.scheduler(), 25);
-            }
-
-            scheduleBeat() {
-                const section = this.data.layout[this.currentSectionIndex];
-                const beatsPerBar = this.data.signature || 4;
-                const secondsPerBeat = 60.0 / this.data.bpm;
-
-                const totalBeatsFromStart = (this.currentBar * beatsPerBar) + this.currentBeat;
-                const offset = section.time + (totalBeatsFromStart * secondsPerBeat);
-
-                const source = this.audioCtx.createBufferSource();
-                source.buffer = this.buffer;
-
-                const gain = this.audioCtx.createGain();
-                gain.gain.setValueAtTime(0, this.nextNoteTime);
-                gain.gain.linearRampToValueAtTime(1, this.nextNoteTime + 0.003);
-                gain.gain.setValueAtTime(1, this.nextNoteTime + secondsPerBeat - 0.003);
-                gain.gain.linearRampToValueAtTime(0, this.nextNoteTime + secondsPerBeat);
-
-                source.connect(gain);
-                gain.connect(this.audioCtx.destination);
-                
-                source.start(this.nextNoteTime, offset, secondsPerBeat);
-
-                if (this.currentBeat === 0) {
-                    const diff = (this.nextNoteTime - this.audioCtx.currentTime) * 1000;
-                    setTimeout(() => { 
-                        if(this.isPlaying) this.onSectionChange(section.label); 
-                    }, Math.max(0, diff));
-                }
-
-                this.nextNoteTime += secondsPerBeat;
-                this.advanceBeat(section, beatsPerBar);
-            }
-
-            advanceBeat(section, beatsPerBar) {
-                this.currentBeat++;
-
-                if (this.currentBeat >= beatsPerBar) {
-                    this.currentBeat = 0;
-                    this.currentBar++;
-
-                    if (this.pendingSection) {
-                        const idx = this.data.layout.findIndex(s => s.label === this.pendingSection);
-                        if (idx !== -1) {
-                            this.currentSectionIndex = idx;
-                            this.currentBar = 0;
-                        }
-                        this.pendingSection = null;
-                        return;
-                    }
-
-                    if (this.currentBar >= section.bars) {
-                        this.handleSectionEnd(section);
-                    }
-                }
-            }
-
-            handleSectionEnd(section) {
-                this.currentBar = 0;
-                const label = section.label;
-
-                if (label.includes('Ending')) {
-                    setTimeout(() => {
-                        this.stop();
-                        document.getElementById('btn-start').disabled = false;
-                        document.getElementById('btn-stop').disabled = true;
-                        this.resetVisuals();
-                        vibrate(50);
-                    }, 100);
-                    return;
-                }
-
-                if (label.includes('Fill In')) {
-                    const fillLetter = label.replace('Fill In ', '').trim();
-                    const mainLetter = fillLetter.charAt(0);
-                    const targetMain = `Main ${mainLetter}`;
-                    const mainIdx = this.data.layout.findIndex(s => s.label === targetMain);
-                    if (mainIdx !== -1) {
-                        this.currentSectionIndex = mainIdx;
-                    }
-                    return;
-                }
-
-                if (label.includes('Intro')) {
-                    const mainIdx = this.data.layout.findIndex(s => s.label === 'Main A');
-                    if (mainIdx !== -1) {
-                        this.currentSectionIndex = mainIdx;
-                    }
-                    return;
-                }
-            }
-
-            resetVisuals() {
-                document.querySelectorAll('.pad-btn').forEach(b => b.classList.remove('active-playing', 'queued'));
-            }
-        }
-
-        const engine = new DrummerEngine();
-        let files = {};
-
-        document.getElementById('btn-load-folder').onclick = () => {
-            vibrate(20);
-            document.getElementById('folder-input').click();
-        };
-
-        document.getElementById('folder-input').onchange = (e) => {
-            files = {};
-            Array.from(e.target.files).forEach(f => {
-                const name = f.name.substring(0, f.name.lastIndexOf('.')).toLowerCase().trim();
-                const ext = f.name.split('.').pop().toLowerCase();
-                if (!files[name]) files[name] = { label: f.name.substring(0, f.name.lastIndexOf('.')) };
-                if (ext === 'json') files[name].json = f;
-                if (['mp3','wav','ogg'].includes(ext)) files[name].audio = f;
-            });
-            populateSelect();
-        };
-
-        function populateSelect() {
-            const select = document.getElementById('style-select');
-            const valid = Object.keys(files).filter(k => files[k].json && files[k].audio);
-            
-            select.innerHTML = '<option value="">-- SELECIONE UM RHYTHM --</option>' +
-                valid.map(k => `<option value="${k}">${files[k].label}</option>`).join('');
-            
-            if (valid.length > 0) {
-                select.value = valid[0];
-                loadStyle(valid[0]);
-            }
-        }
-
-        document.getElementById('style-select').onchange = (e) => {
-            vibrate(20);
-            if (e.target.value) {
-                loadStyle(e.target.value);
-            }
-        };
-
-        async function loadStyle(key) {
-            await engine.init();
-            await engine.loadKit(files[key].json, files[key].audio);
-            
-            document.getElementById('bpm-display').innerText = engine.data.bpm;
-            
-            document.querySelectorAll('.pad-btn').forEach(b => {
-                b.disabled = true;
-                b.classList.remove('active-playing', 'queued');
-                const section = engine.data.layout.find(s => s.label === b.id.replace('pad-', ''));
-                if (section) {
-                    b.disabled = false;
-                    b.onclick = () => {
-                        vibrate(30);
-                        if (!engine.isPlaying) {
-                            engine.currentSectionIndex = engine.data.layout.findIndex(s => s.label === section.label);
-                            engine.currentBar = 0;
-                            engine.currentBeat = 0;
-                            engine.start();
-                            document.getElementById('btn-start').disabled = true;
-                            document.getElementById('btn-stop').disabled = false;
-                        } else {
-                            engine.pendingSection = section.label;
-                            document.querySelectorAll('.pad-btn').forEach(p => p.classList.remove('queued'));
-                            b.classList.add('queued');
-                        }
-                    };
-                }
-            });
-            
-            document.getElementById('btn-start').disabled = false;
-        }
-
-        document.getElementById('btn-start').onclick = () => {
-            vibrate(40);
-            engine.start(); 
-            document.getElementById('btn-start').disabled = true; 
-            document.getElementById('btn-stop').disabled = false; 
-        };
-        
-        document.getElementById('btn-stop').onclick = () => {
-            vibrate(40);
-            engine.stop(); 
-            document.getElementById('btn-start').disabled = false; 
-            document.getElementById('btn-stop').disabled = true; 
-            resetVisuals(); 
-        };
-
-        engine.onSectionChange = (label) => {
-            document.querySelectorAll('.pad-btn').forEach(b => b.classList.remove('active-playing', 'queued'));
-            const active = document.getElementById(`pad-${label}`);
-            if (active) {
-                active.classList.add('active-playing');
-                vibrate(15); // Vibração sutil na troca
-            }
-        };
-
-        function resetVisuals() { 
-            document.querySelectorAll('.pad-btn').forEach(b => b.classList.remove('active-playing', 'queued')); 
+        if ('serviceWorker' in navigator) {
+            navigator.serviceWorker.register('sw.js')
+                .then(() => console.log('Service Worker registrado!'))
+                .catch((err) => console.error('Erro no SW:', err));
         }
     </script>
 </body>
+
 </html>
